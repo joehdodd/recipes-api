@@ -1,0 +1,10 @@
+{
+  "name": "Recipes API",
+  "version": "1.0.0",
+  "description": "Node API for Recipes app.",
+  "main": "index.js",
+  "repository": "https://github.com/joehdodd/recipes-api.git",
+  "author": "Joe Dodd",
+  "license": "MIT",
+  "private": false
+}
