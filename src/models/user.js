@@ -1,8 +1,11 @@
-const user = (sequelize, DataTypes) => {
+export default (sequelize, DataTypes) => {
   const User = sequelize.define('user', {
     username: {
       type: DataTypes.STRING,
       unique: true
+    },
+    password: {
+      type: DataTypes.STRING
     },
     firstName: {
       type: DataTypes.STRING
@@ -42,5 +45,3 @@ const user = (sequelize, DataTypes) => {
 
   return User;
 };
-
-export default user;

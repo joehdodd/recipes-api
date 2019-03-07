@@ -4,55 +4,65 @@ import bodyParser from 'body-parser';
 import 'dotenv/config';
 import models, { sequelize } from './models';
 import { context } from './middleware';
-import routes from './routes';
+import router from './routes';
 
 const app = express();
 
-app.use(cors());
+let corsOptions = {
+  origin: function(origin, cb) {
+    if (process.env.WHITELIST.indexOf(origin) !== -1) {
+      cb(null, true);
+    } else {
+      cb(new Error('Origin not whitlisted. Blocked by CORS! ☠️'));
+    }
+  }
+};
+
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(context);
 
-app.use('/session', routes.session);
-// app.use('/users', routes.user);
-// app.use('/recipes', routes.recipe);
+router(app);
 
-sequelize.sync().then(() => {
+const eraseDatabaseOnSync = false;
+
+sequelize.sync({ force: eraseDatabaseOnSync }).then(async () => {
+  if (eraseDatabaseOnSync) {
+    createUsersWithRecipes();
+  }
+
   app.listen(process.env.PORT, () => {
-    console.log(`Example app listening on port ${process.env.PORT}!`);
+    console.log(`App listening on port ${process.env.PORT}! 💻`);
   });
 });
 
-// app.post("/createUser", (req, res) => {
-//   const { username, email, firstName, lastName } = req.body;
-//   if (!firstName || !lastName || !username || !email) {
-//     return res
-//       .status(400)
-//
-//       .json({ error: true, message: "You must provide a user to create!" });
-//   } else {
-//     User.findOrCreate({
-//       where: { username, email, firstName, lastName }
-//     }).spread((user, created) => {
-//       console.log(
-//         user.get({
-//           plain: true
-//         })
-//       );
-//       console.log(created);
-//       if (!!created) {
-//         return res.status(200).json({
-//           error: false,
-//           message: `User ${firstName} ${lastName} created.`
-//         });
-//       } else {
-//         return res.status(400).json({
-//           error: true,
-//           message: `User taken.`
-//         });
-//       }
-//     });
-//   }
-// });
-//
-// app.get("findUser");
+const createUsersWithRecipes = async () => {
+  await models.User.create(
+    {
+      username: 'joe',
+      recipes: [
+        {
+          title: 'Taco Salad',
+        },
+      ],
+    },
+    {
+      include: [models.Recipe],
+    },
+  );
+
+  await models.User.create(
+    {
+      username: 'wiley',
+      recipes: [
+        {
+          title: 'Pizza',
+        },
+      ],
+    },
+    {
+      include: [models.Recipe],
+    },
+  );
+};
