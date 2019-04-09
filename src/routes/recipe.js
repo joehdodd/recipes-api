@@ -5,8 +5,9 @@ const router = Router();
 
 router.get('/', JWTAuth, async (req, res) => {
   let recipes = [];
-  if (req.query && req.query.userId) {
-    recipes = await req.context.models.Recipe.findByUserId(req.query.userId);
+  if (req.query && req.query.user) {
+    const { id } = req.user.dataValues;
+    recipes = await req.context.models.Recipe.findByUserId(id);
   } else {
     recipes = await req.context.models.Recipe.findAll();
   }
