@@ -1,31 +1,40 @@
 import { Router } from 'express';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 
-export default app => {
-  const router = Router();
+const router = Router();
 
-  router.post('/', async function(req, res, next) {
-    const { username, password } = req.body;
+router.post('/', async function(req, res, next) {
+  const { username, password } = req.body;
 
-    if (username && password) {
-      const user = await req.context.models.User.findByLogin(username);
+  if (username && password) {
+    const user = await req.context.models.User.findByLogin(username);
 
-      if (user === null || !user) {
-        res.status(401).json({ msg: 'User not found', user });
-      }
-
-      if (user && user.password === password) {
-        const payload = { id: user.id };
-        const token = jwt.sign(payload, process.env.KEY);
-        res.cookie('jwt', token, { httpOnly: true, secure: false });
-        res.status(200).send({ isAuthenticated: true });
-      } else {
-        res.status(401).json({ msg: 'Incorrect password' });
-      }
-    } else {
-      res.status(401).json({ msg: 'Username and password reqiured.' });
+    if (user === null || !user) {
+      return res.status(401).json({ message: 'User not found', user });
     }
-  });
 
-  return router;
-};
+    const passwordMatch = await bcrypt.compare(password, user.password);
+
+    if (passwordMatch) {
+      const payload = { id: user.id };
+      const token = jwt.sign(payload, process.env.KEY);
+      const session = jwt.sign({ session: true }, process.env.KEY, {
+        expiresIn: '30000'
+      });
+      res.cookie('JWTAuth', token, {
+        httpOnly: true,
+        secure: false
+      });
+      return res.status(200).send(session);
+    } else {
+      return res
+        .status(401)
+        .json({ message: 'Incorrect password', error: true });
+    }
+  } else {
+    return res.status(401).json({ message: 'Username and password reqiured.' });
+  }
+});
+
+export default router;

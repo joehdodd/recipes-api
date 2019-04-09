@@ -1,3 +1,3 @@
 import passport from 'passport';
 
-export default passport.authenticate('jwt', { session: false });
+export default passport.authenticate('JWTAuth', { session: false });

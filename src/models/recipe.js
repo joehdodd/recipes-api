@@ -7,6 +7,21 @@ const recipe = (sequelize, DataTypes) => {
     Recipe.belongsTo(models.User);
   };
 
+  Recipe.findById = async id => {
+    let recipe = await Recipe.findOne({
+      where: { id }
+    });
+
+    return recipe;
+  };
+
+  Recipe.findByUserId = async userId => {
+    const recipes = await Recipe.findAll({
+      where: { userId }
+    });
+    return recipes;
+  };
+
   return Recipe;
 };
 

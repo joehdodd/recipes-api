@@ -23,10 +23,12 @@ let corsOptions = {
 };
 
 const JwtStrategy = passportJWT.Strategy;
+const ExtractJwt = passportJWT.ExtractJwt;
 
 app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  res.header('Access-Control-Allow-Origin', origin);
+  const { headers } = req;
+  res.header('Access-Control-Allow-Origin', headers.origin);
+  res.header('Access-Control-Allow-Headers', headers);
   res.header('Access-Control-Allow-Credentials', true);
   next();
 });
@@ -39,38 +41,43 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(context);
 
 passport.use(
+  'JWTAuth',
   new JwtStrategy(
     {
-      jwtFromRequest: req => {
-        console.log('request cookies', req.cookies);
-        return req.cookies.jwt;
-      },
+      jwtFromRequest: req => req.cookies.JWTAuth,
       secretOrKey: process.env.KEY
     },
-    function(jwt_payload, next) {
-      console.log('payload received', jwt_payload);
-      const user = models.User.findById(jwt_payload.id);
+    async function(jwt_payload, done) {
+      const user = await models.User.findById(jwt_payload.id);
       if (user) {
-        next(null, user);
+        done(null, user);
       } else {
-        next(null, { msg: 'You are not authorized!' });
+        done(null, false, { message: 'Not authorized!' });
       }
     }
   )
 );
 
-app.get(
-  '/protected',
-  passport.authenticate('jwt', { session: false }),
-  (req, res) => {
-    res.status(200).json({ msg: 'Authed' });
-  }
+passport.use(
+  'JWTSession',
+  new JwtStrategy(
+    {
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      secretOrKey: process.env.KEY
+    },
+    function(jwt, done) {
+      if (new Date(jwt.exp * 1000).getTime() < new Date().getTime()) {
+        return done(null, false, { message: 'Your session has expired!' });
+      } else {
+        return done(null, {});
+      }
+    }
+  )
 );
 
 router(app);
 
 const eraseDatabaseOnSync = false;
-
 sequelize.sync({ force: eraseDatabaseOnSync }).then(async () => {
   if (eraseDatabaseOnSync) {
     seed();
