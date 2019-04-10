@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
+import jwt from 'jsonwebtoken';
 import passport from 'passport';
 import passportJWT from 'passport-jwt';
 import 'dotenv/config';
@@ -58,14 +59,15 @@ passport.use(
   )
 );
 
-passport.use(
+const session = passport.use(
   'JWTSession',
   new JwtStrategy(
     {
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: req => req.cookies.JWTSession,
       secretOrKey: process.env.KEY
     },
     function(jwt, done) {
+      console.log('JWTSession', jwt);
       if (new Date(jwt.exp * 1000).getTime() < new Date().getTime()) {
         return done(null, false, { message: 'Your session has expired!' });
       } else {
@@ -74,6 +76,30 @@ passport.use(
     }
   )
 );
+
+const sessionMiddleware = (req, res, next) => {
+  if (req.url === '/session') {
+    next();
+  } else {
+    const { JWTSession } = req.cookies;
+    const sessionToken = jwt.verify(JWTSession, process.env.KEY, function(
+      err,
+      decoded
+    ) {
+      if (err) {
+        console.log('session expired');
+        res
+          .status(401)
+          .clearCookie('JWTSession')
+          .send({ message: 'Your session has expired!' });
+      } else {
+        next();
+      }
+    });
+  }
+};
+
+app.use(sessionMiddleware);
 
 router(app);
 

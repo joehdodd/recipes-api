@@ -20,8 +20,9 @@ router.post('/', async function(req, res, next) {
       const payload = { id: user.id };
       const token = jwt.sign(payload, process.env.KEY);
       const session = jwt.sign({ session: true }, process.env.KEY, {
-        expiresIn: '30000'
+        expiresIn: '15000'
       });
+      res.cookie('JWTSession', session);
       res.cookie('JWTAuth', token, {
         httpOnly: true,
         secure: false

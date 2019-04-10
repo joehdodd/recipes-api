@@ -4,6 +4,8 @@ import JWTAuth from '../middleware/JWTAuth';
 const router = Router();
 
 router.get('/', JWTAuth, async (req, res) => {
+  console.log('get recipes request', req.query);
+
   let recipes = [];
   if (req.query && req.query.user) {
     const { id } = req.user.dataValues;
