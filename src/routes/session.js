@@ -24,7 +24,7 @@ router.post('/', async function(req, res, next) {
         httpOnly: true,
         secure: false
       });
-      return res.status(200).send();
+      return res.status(200).send({ user });
     } else {
       return res
         .status(401)
