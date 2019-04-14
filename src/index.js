@@ -77,29 +77,17 @@ const session = passport.use(
   )
 );
 
-const sessionMiddleware = (req, res, next) => {
-  if (req.url === '/session') {
-    next();
-  } else {
-    const { JWTSession } = req.cookies;
-    const sessionToken = jwt.verify(JWTSession, process.env.KEY, function(
-      err,
-      decoded
-    ) {
-      if (err) {
-        console.log('session expired');
-        res
-          .status(401)
-          .clearCookie('JWTSession')
-          .send({ message: 'Your session has expired!' });
-      } else {
-        next();
-      }
-    });
-  }
-};
+// const sessionMiddleware = (req, res, next) => {
+//   if (req.url === '/session') {
+//     next();
+//   } else {
+//     const { session } = req.cookies;
+//     console.log('session cookie', session);
+//     next();
+//   }
+// };
 
-app.use(sessionMiddleware);
+// app.use(sessionMiddleware);
 
 router(app);
 
