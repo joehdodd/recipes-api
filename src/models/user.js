@@ -15,6 +15,9 @@ export default (sequelize, DataTypes) => {
     },
     email: {
       type: DataTypes.STRING
+    },
+    favoriteRecipes: {
+      type: DataTypes.ARRAY(DataTypes.INTEGER)
     }
   });
 
