@@ -19,7 +19,7 @@ router.post('/', async function(req, res, next) {
     if (passwordMatch) {
       const payload = { id: user.id };
       const token = jwt.sign(payload, process.env.KEY);
-      res.cookie('session', true, { maxAge: 15000 });
+      res.cookie('session', true, { maxAge: 604800000 });
       res.cookie('JWTAuth', token, {
         httpOnly: true,
         secure: false

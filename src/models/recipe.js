@@ -1,6 +1,7 @@
 const recipe = (sequelize, DataTypes) => {
   const Recipe = sequelize.define('recipe', {
-    title: { type: DataTypes.STRING }
+    title: { type: DataTypes.STRING },
+    description: { type: DataTypes.STRING }
   });
 
   Recipe.associate = models => {
