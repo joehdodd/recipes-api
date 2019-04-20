@@ -9,7 +9,7 @@
   "private": false,
   "scripts": {
     "dev": "nodemon src/index.js --exec babel-node",
-    "start": "node src/index.js"
+    "start": "node src/index.js --exec babel-node"
   },
   "dependencies": {
     "bcrypt": "^3.0.4",
