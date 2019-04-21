@@ -29,6 +29,7 @@ const ExtractJwt = passportJWT.ExtractJwt;
 
 app.use((req, res, next) => {
   const { headers } = req;
+  console.log('request headers', headers);
   res.header('Access-Control-Allow-Origin', headers.origin);
   res.header('Access-Control-Allow-Headers', headers);
   res.header('Access-Control-Allow-Credentials', true);
@@ -60,23 +61,23 @@ passport.use(
   )
 );
 
-const session = passport.use(
-  'JWTSession',
-  new JwtStrategy(
-    {
-      jwtFromRequest: req => req.cookies.JWTSession,
-      secretOrKey: process.env.KEY
-    },
-    function(jwt, done) {
-      console.log('JWTSession', jwt);
-      if (new Date(jwt.exp * 1000).getTime() < new Date().getTime()) {
-        return done(null, false, { message: 'Your session has expired!' });
-      } else {
-        return done(null, {});
-      }
-    }
-  )
-);
+// const session = passport.use(
+//   'JWTSession',
+//   new JwtStrategy(
+//     {
+//       jwtFromRequest: req => req.cookies.JWTSession,
+//       secretOrKey: process.env.KEY
+//     },
+//     function(jwt, done) {
+//       console.log('JWTSession', jwt);
+//       if (new Date(jwt.exp * 1000).getTime() < new Date().getTime()) {
+//         return done(null, false, { message: 'Your session has expired!' });
+//       } else {
+//         return done(null, {});
+//       }
+//     }
+//   )
+// );
 
 // const sessionMiddleware = (req, res, next) => {
 //   if (req.url === '/session') {

@@ -24,6 +24,7 @@ router.post('/', async function(req, res, next) {
         httpOnly: true,
         secure: false
       });
+      console.log('/session response', res);
       return res.status(200).send({ user });
     } else {
       return res
