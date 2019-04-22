@@ -25,10 +25,10 @@ router.post('/', async function(req, res, next) {
         domain,
         maxAge: 604800000
       });
-      const { username, firstName, lastName, email } = user;
+      const { username, firstName, lastName, email, id } = user;
       return res
         .status(200)
-        .send({ user: { username, firstName, lastName, email } });
+        .send({ user: { username, firstName, lastName, email, id } });
     } else {
       return res
         .status(401)
