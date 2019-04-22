@@ -19,12 +19,10 @@ router.post('/', async function(req, res, next) {
     if (passwordMatch) {
       const payload = { id: user.id };
       const token = jwt.sign(payload, process.env.KEY);
-      res.cookie('session', true, { maxAge: 604800000 });
       res.cookie('JWTAuth', token, {
-        httpOnly: true,
-        secure: false
+        domain: 'recipes.casa',
+        maxAge: 604800000
       });
-      console.log('/session response', res);
       return res.status(200).send({ user });
     } else {
       return res

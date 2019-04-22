@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../src/middleware/JWTAuth.js"],"names":["passport","authenticate","session"],"mappings":";;;;;;AAAA;;;;;;kBAEeA,mBAASC,YAAT,CAAsB,SAAtB,EAAiC,EAAEC,SAAS,KAAX,EAAjC,C","file":"JWTAuth.js","sourcesContent":["import passport from 'passport';\n\nexport default passport.authenticate('JWTAuth', { session: false });\n"]}

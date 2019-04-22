@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../src/middleware/JWTSession.js"],"names":["passport","authenticate","session"],"mappings":";;;;;;AAAA;;;;;;kBAEeA,mBAASC,YAAT,CAAsB,YAAtB,EAAoC,EAAEC,SAAS,KAAX,EAApC,C","file":"JWTSession.js","sourcesContent":["import passport from 'passport';\n\nexport default passport.authenticate('JWTSession', { session: false });\n"]}
