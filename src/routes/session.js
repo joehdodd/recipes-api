@@ -19,11 +19,16 @@ router.post('/', async function(req, res, next) {
     if (passwordMatch) {
       const payload = { id: user.id };
       const token = jwt.sign(payload, process.env.KEY);
+      const domain =
+        process.env.NODE_ENV === 'production' ? 'recipes.casa' : 'localhost';
       res.cookie('JWTAuth', token, {
-        domain: 'recipes.casa',
+        domain,
         maxAge: 604800000
       });
-      return res.status(200).send({ user });
+      const { username, firstName, lastName, email, id } = user;
+      return res
+        .status(200)
+        .send({ user: { username, firstName, lastName, email, id } });
     } else {
       return res
         .status(401)

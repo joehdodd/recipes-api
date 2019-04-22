@@ -11,7 +11,7 @@ router.get('/', JWTAuth, async (req, res) => {
 
 router.get('/:userId', JWTAuth, async (req, res) => {
   const user = await req.context.models.User.findById(req.params.userId);
-  return res.status(200).json({ message: 'Ok', data: user });
+  return res.status(200).json({ message: 'Ok', user: user.dataValues });
 });
 
 router.post('/', async (req, res) => {

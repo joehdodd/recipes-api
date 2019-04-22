@@ -6,8 +6,10 @@ const router = Router();
 router.get('/', async (req, res) => {
   let recipes = [];
   if (req.query && req.query.user) {
-    const { id } = req.user.dataValues;
-    recipes = await req.context.models.Recipe.findByUserId(id);
+    const { user } = req.query;
+    console.log('user query?', req.query.user);
+    recipes = await req.context.models.Recipe.findByUserId(user);
+    console.log('recipes', recipes);
   } else {
     recipes = await req.context.models.Recipe.findAll();
   }

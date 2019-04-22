@@ -29,7 +29,6 @@ const ExtractJwt = passportJWT.ExtractJwt;
 
 app.use((req, res, next) => {
   const { headers } = req;
-  console.log('request headers', headers);
   res.header('Access-Control-Allow-Origin', headers.origin);
   res.header('Access-Control-Allow-Headers', headers);
   res.header('Access-Control-Allow-Credentials', true);

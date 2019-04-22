@@ -22,7 +22,7 @@ var router = (0, _express.Router)();
 
 router.post('/', function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(req, res, next) {
-    var _req$body, username, password, user, passwordMatch, payload, token;
+    var _req$body, username, password, user, passwordMatch, payload, token, domain;
 
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
@@ -31,7 +31,7 @@ router.post('/', function () {
             _req$body = req.body, username = _req$body.username, password = _req$body.password;
 
             if (!(username && password)) {
-              _context.next = 20;
+              _context.next = 21;
               break;
             }
 
@@ -56,30 +56,31 @@ router.post('/', function () {
             passwordMatch = _context.sent;
 
             if (!passwordMatch) {
-              _context.next = 17;
+              _context.next = 18;
               break;
             }
 
             payload = { id: user.id };
             token = _jsonwebtoken2.default.sign(payload, process.env.KEY);
+            domain = process.env.NODE_ENV === 'production' ? 'recipes.casa' : 'localhost';
 
             res.cookie('JWTAuth', token, {
-              domain: 'recipes.casa',
+              domain: domain,
               maxAge: 604800000
             });
             return _context.abrupt('return', res.status(200).send({ user: user }));
 
-          case 17:
+          case 18:
             return _context.abrupt('return', res.status(401).json({ message: 'Incorrect password', error: true }));
 
-          case 18:
-            _context.next = 21;
+          case 19:
+            _context.next = 22;
             break;
 
-          case 20:
+          case 21:
             return _context.abrupt('return', res.status(401).json({ message: 'Username and password reqiured.' }));
 
-          case 21:
+          case 22:
           case 'end':
             return _context.stop();
         }
