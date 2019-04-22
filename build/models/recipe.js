@@ -9,7 +9,9 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 var recipe = function recipe(sequelize, DataTypes) {
   var Recipe = sequelize.define('recipe', {
     title: { type: DataTypes.STRING },
-    description: { type: DataTypes.STRING }
+    description: { type: DataTypes.STRING },
+    ingredients: { type: DataTypes.ARRAY(DataTypes.STRING) },
+    instructions: { type: DataTypes.ARRAY(DataTypes.STRING) }
   });
 
   Recipe.associate = function (models) {

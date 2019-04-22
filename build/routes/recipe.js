@@ -91,7 +91,7 @@ router.get('/:recipeId', _JWTAuth2.default, function () {
 
 router.post('/', _JWTAuth2.default, function () {
   var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(req, res) {
-    var _req$body, instructions, ingredients, ingredientsArray, instructionsArray;
+    var _req$body, instructions, ingredients, ingredientsArray, instructionsArray, recipe;
 
     return regeneratorRuntime.wrap(function _callee3$(_context3) {
       while (1) {
@@ -106,18 +106,22 @@ router.post('/', _JWTAuth2.default, function () {
             instructionsArray = instructions.split(',').map(function (s) {
               return s.trim();
             });
-
-            console.log(ingredientsArray);
-            console.log(instructionsArray);
-            // const recipe = await req.context.models.Recipe.create({
-            //   title: req.body.title,
-            //   description: req.body.description,
-            //   userId: req.user.dataValues.id
-            // });
-            // console.log('create recipe', recipe);
-            // return res.status(200).json({ message: 'Ok!', data: recipe });
+            _context3.next = 6;
+            return req.context.models.Recipe.create({
+              title: req.body.title,
+              description: req.body.description,
+              userId: req.user.dataValues.id,
+              ingredients: ingredientsArray,
+              instructions: instructionsArray
+            });
 
           case 6:
+            recipe = _context3.sent;
+
+            console.log('create recipe', recipe);
+            return _context3.abrupt('return', res.status(200).json({ message: 'Ok!', data: recipe }));
+
+          case 9:
           case 'end':
             return _context3.stop();
         }
