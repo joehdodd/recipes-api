@@ -14,6 +14,12 @@ router.get('/:userId', JWTAuth, async (req, res) => {
   return res.status(200).json({ message: 'Ok', user: user.dataValues });
 });
 
+router.get('/:userId/recipes', JWTAuth, async (req, res) => {
+  const { userId } = req.params;
+  const recipes = await req.context.models.Recipe.findByUserId(userId);
+  return res.status(200).json({ message: 'Ok!', data: recipes });
+});
+
 router.post('/', async (req, res) => {
   const { username, password } = req.body;
   const existingUser = await req.context.models.User.findByLogin(username);

@@ -4,15 +4,7 @@ import JWTAuth from '../middleware/JWTAuth';
 const router = Router();
 
 router.get('/', async (req, res) => {
-  let recipes = [];
-  if (req.query && req.query.user) {
-    const { user } = req.query;
-    console.log('user query?', req.query.user);
-    recipes = await req.context.models.Recipe.findByUserId(user);
-    console.log('recipes', recipes);
-  } else {
-    recipes = await req.context.models.Recipe.findAll();
-  }
+  const recipes = await req.context.models.Recipe.findAll();
   return res.status(200).json({ message: 'Ok!', data: recipes });
 });
 

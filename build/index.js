@@ -68,7 +68,6 @@ var ExtractJwt = _passportJwt2.default.ExtractJwt;
 app.use(function (req, res, next) {
   var headers = req.headers;
 
-  console.log('request headers', headers);
   res.header('Access-Control-Allow-Origin', headers.origin);
   res.header('Access-Control-Allow-Headers', headers);
   res.header('Access-Control-Allow-Credentials', true);

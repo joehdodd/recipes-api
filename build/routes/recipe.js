@@ -18,38 +18,19 @@ var router = (0, _express.Router)();
 
 router.get('/', function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(req, res) {
-    var recipes, id;
+    var recipes;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            recipes = [];
-
-            if (!(req.query && req.query.user)) {
-              _context.next = 8;
-              break;
-            }
-
-            id = req.user.dataValues.id;
-            _context.next = 5;
-            return req.context.models.Recipe.findByUserId(id);
-
-          case 5:
-            recipes = _context.sent;
-            _context.next = 11;
-            break;
-
-          case 8:
-            _context.next = 10;
+            _context.next = 2;
             return req.context.models.Recipe.findAll();
 
-          case 10:
+          case 2:
             recipes = _context.sent;
-
-          case 11:
             return _context.abrupt('return', res.status(200).json({ message: 'Ok!', data: recipes }));
 
-          case 12:
+          case 4:
           case 'end':
             return _context.stop();
         }
