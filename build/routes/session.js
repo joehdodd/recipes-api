@@ -22,7 +22,7 @@ var router = (0, _express.Router)();
 
 router.post('/', function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(req, res, next) {
-    var _req$body, username, password, user, passwordMatch, payload, token, domain;
+    var _req$body, username, password, user, passwordMatch, payload, token, domain, _username, firstName, lastName, email, id;
 
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
@@ -31,7 +31,7 @@ router.post('/', function () {
             _req$body = req.body, username = _req$body.username, password = _req$body.password;
 
             if (!(username && password)) {
-              _context.next = 21;
+              _context.next = 22;
               break;
             }
 
@@ -56,7 +56,7 @@ router.post('/', function () {
             passwordMatch = _context.sent;
 
             if (!passwordMatch) {
-              _context.next = 18;
+              _context.next = 19;
               break;
             }
 
@@ -68,19 +68,20 @@ router.post('/', function () {
               domain: domain,
               maxAge: 604800000
             });
-            return _context.abrupt('return', res.status(200).send({ user: user }));
-
-          case 18:
-            return _context.abrupt('return', res.status(401).json({ message: 'Incorrect password', error: true }));
+            _username = user.username, firstName = user.firstName, lastName = user.lastName, email = user.email, id = user.id;
+            return _context.abrupt('return', res.status(200).send({ user: { username: _username, firstName: firstName, lastName: lastName, email: email, id: id } }));
 
           case 19:
-            _context.next = 22;
+            return _context.abrupt('return', res.status(401).json({ message: 'Incorrect password', error: true }));
+
+          case 20:
+            _context.next = 23;
             break;
 
-          case 21:
+          case 22:
             return _context.abrupt('return', res.status(401).json({ message: 'Username and password reqiured.' }));
 
-          case 22:
+          case 23:
           case 'end':
             return _context.stop();
         }
