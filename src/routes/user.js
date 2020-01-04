@@ -40,4 +40,20 @@ router.post('/', async (req, res) => {
   }
 });
 
+router.put('/', async (req, res) => {
+  const { userId, recipeId } = req.body;
+  req.context.models.User.findById(userId).then(user => {
+    req.context.models.User.update(
+      {
+        favoriteRecipes: [...user.dataValues.favoriteRecipes, recipeId]
+      },
+      { returning: true, where: { id: userId } }
+    )
+      .then(([rowsUpdated, [user]]) => {
+        return res.status(200).json({ message: 'Ok!', data: { user }});
+      })
+      .catch(err => console.log(err));
+  });
+});
+
 export default router;
