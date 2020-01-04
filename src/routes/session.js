@@ -9,7 +9,7 @@ router.post('/', async function(req, res, next) {
 
   if (username && password) {
     const user = await req.context.models.User.findByLogin(username);
-
+    console.log('user returned', user)
     if (user === null || !user) {
       return res.status(401).json({ message: 'User not found', user });
     }
@@ -25,10 +25,10 @@ router.post('/', async function(req, res, next) {
         domain,
         maxAge: 604800000
       });
-      const { username, firstName, lastName, email, id } = user;
+      const { username, firstName, lastName, email, id, favoriteRecipes } = user;
       return res
         .status(200)
-        .send({ user: { username, firstName, lastName, email, id } });
+        .send({ user: { username, firstName, lastName, email, id, favoriteRecipes } });
     } else {
       return res
         .status(401)
