@@ -15,6 +15,7 @@ const recipe = (sequelize, DataTypes) => {
     // });
     Recipe.hasMany(models.Ingredient);
     Recipe.hasMany(models.Instruction);
+    Recipe.hasMany(models.RecipeComment, { as: 'comments' });
   };
 
   Recipe.findById = async id => {

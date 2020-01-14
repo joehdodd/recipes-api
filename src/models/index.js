@@ -12,8 +12,8 @@ const models = {
   User: sequelize.import('./user'),
   Recipe: sequelize.import('./recipe'),
   Ingredient: sequelize.import('./ingredient'),
-  Instruction: sequelize.import('./instruction')
-  // RecipeIngredients: sequelize.import('./recipeIngredients')
+  Instruction: sequelize.import('./instruction'),
+  RecipeComment: sequelize.import('./recipeComment')
 };
 
 Object.keys(models).forEach(key => {

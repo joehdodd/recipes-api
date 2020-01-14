@@ -15,6 +15,10 @@ router.get('/', async (req, res) => {
       {
         model: req.context.models.Instruction,
         as: 'instructions'
+      },
+      {
+        model: req.context.models.RecipeComment,
+        as: 'comments'
       }
     ]
   });
