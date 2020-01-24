@@ -23,6 +23,7 @@ export default (sequelize, DataTypes) => {
 
   User.associate = models => {
     User.hasMany(models.Recipe);
+    User.hasMany(models.RecipeComment);
   };
 
   User.findByLogin = async login => {

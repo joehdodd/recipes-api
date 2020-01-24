@@ -5,6 +5,7 @@ const recipeComment = (sequelize, DataTypes) => {
 
   RecipeComment.associate = models => {
     RecipeComment.belongsTo(models.Recipe);
+    RecipeComment.belongsTo(models.User);
   }
 
   RecipeComment.findById = async id => {
